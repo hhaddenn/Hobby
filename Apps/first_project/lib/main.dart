@@ -1,7 +1,8 @@
+import 'package:first_project/result.dart';
 import 'package:flutter/material.dart';
 
-import './question.dart';
-import './answer.dart';
+import './quiz.dart';
+import 'result.dart';
 
 // void main() {
 //   runApp(MyApp());
@@ -18,46 +19,74 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  final _questions = const [
+    {
+      'questionText': 'What\'s your favourite color?',
+      'answers': [
+        {'text': 'Black' , 'score': 9},
+        {'text': 'Red'   , 'score': 1},
+        {'text': 'Green' , 'score': 4},
+        {'text': 'Yellow', 'score': 7}
+      ],
+    },
+    {
+      'questionText': 'What\'s your favourite animal?',
+      'answers': [
+        {'text': 'Hamster', 'score': 4},
+        {'text': 'Dog'    , 'score': 2},
+        {'text': 'Octopus', 'score': 8},
+        {'text': 'Otter'  , 'score': 6}
+      ],
+    },
+    {
+      'questionText': 'Who\'s your favourite movie genre?',
+      'answers': [
+        {'text': 'Horror' , 'score': 10},
+        {'text': 'Comedy' , 'score': 4},
+        {'text': 'Romance', 'score': 2},
+        {'text': 'Action' , 'score': 6}
+      ],
+    },
+  ];
   var _questionIndex = 0;
+  var _totalScore = 0;
 
-  void _answerQuestion() {
+  void _resetQuiz() {
+    setState(() {
+      _questionIndex = 0;
+      _totalScore = 0;
+    });
+  }
+
+  void _answerQuestion(int score) {
+
+    _totalScore += score;
+
     setState(() {
       _questionIndex = _questionIndex + 1;
     });
     print(_questionIndex);
+    if (_questionIndex < _questions.length) {
+      print('We have more questions!');
+    } else {
+      print('We don\'t have more questions!');
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    var questions = [
-      {
-        'questionText': 'What\'s your favourite color?',
-        'answers': ['Blue', 'Red', 'Green', 'Yellow'],
-      },
-      {
-        'questionText': 'What\'s your favourite animal?',
-        'answers': ['Cat', 'Dog', 'Octopus', 'Otter'],
-      },
-      {
-        'questionText': 'Who\'s your favourite actor?',
-        'answers': ['Johnny Depp', 'Leonardo DiCaprio', 'Tom Hanks', 'George Clooney'],
-      },
-    ];
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
           title: Text('My First App'),
         ),
-        body: Column(
-          children: [
-            Question(
-              questions[_questionIndex]['questionText'],
-            ),
-            Answer(_answerQuestion),
-            Answer(_answerQuestion),
-            Answer(_answerQuestion),
-          ],
-        ),
+        body: _questionIndex < _questions.length
+            ? Quiz(
+                answerQuestion: _answerQuestion,
+                questionIndex: _questionIndex,
+                questions: _questions,
+              )
+            : Result(_totalScore, _resetQuiz),
       ),
     );
   }
