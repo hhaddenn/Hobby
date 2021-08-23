@@ -1,25 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:random_app/screens/menu.dart';
 
 void main() => runApp(MyApp());
 
-class MyApp extends StatefulWidget {
-  @override
-  State<StatefulWidget> createState() {
-    // TODO: implement createState
-    return _MyAppState();
-  }
-}
-
-class _MyAppState extends State<MyApp> {
+class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text('Random App'),
-        ),
+    return GetMaterialApp(
+      title: 'RTOL',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
       ),
+      initialRoute: "/",
+      getPages: [
+        GetPage(name: "/", page: ()=>MenuScreen())
+      ],
+      debugShowCheckedModeBanner: false,
     );
   }
 }
